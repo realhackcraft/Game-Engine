@@ -11,8 +11,8 @@ out vec4 fColor;
 
 void main()
 {
-    fColor = aColor;
-    gl_Position = uProjection * uView * vec4(aPos, 1.0);
+  fColor = aColor;
+  gl_Position = uProjection * uView * vec4(aPos, 1.0);
 }
 
 #type fragment
@@ -20,9 +20,11 @@ void main()
 
 in vec4 fColor;
 
+uniform float uTime;
+
 out vec4 color;
 
 void main()
 {
-    color = fColor;
+  color = fColor;
 }
