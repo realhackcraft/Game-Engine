@@ -32,7 +32,6 @@ public class LevelEditor extends Scene {
   private int vaoId, vboId, eboId;
 
   public LevelEditor() {
-    System.out.println("LevelEditor");
     Window.get().r = 1f;
     Window.get().g = 1f;
     Window.get().b = 1f;
