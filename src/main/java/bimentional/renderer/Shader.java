@@ -80,40 +80,42 @@ public class Shader {
     glShaderSource(vertexID, vertexShaderSource);
     glCompileShader(vertexID);
 
-    int success = glGetShaderi(vertexID, GL_COMPILE_STATUS);
-    if (success == GL_FALSE) {
-      int len = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
-      System.out.println("ERROR: Failed to compile vertex shader from " + filePath + '.');
-      System.out.println(glGetShaderInfoLog(vertexID, len));
-      assert false : "";
-    }
-
     fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
 
     glShaderSource(fragmentID, fragmentShaderSource);
     glCompileShader(fragmentID);
-
-//     check for errors in compilation
-    success = glGetShaderi(fragmentID, GL_COMPILE_STATUS);
-    if (success == GL_FALSE) {
-      int len = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
-      System.out.println("ERROR: Failed to compile fragment shader from " + filePath + '.');
-      System.out.println(glGetShaderInfoLog(fragmentID, len));
-      assert false : "";
-    }
 
     shaderProgramId = glCreateProgram();
     glAttachShader(shaderProgramId, vertexID);
     glAttachShader(shaderProgramId, fragmentID);
     glLinkProgram(shaderProgramId);
 
-//     check for linking errors
+    checkCompilationAndLinkingErrors(vertexID, fragmentID);
+  }
+
+  private void checkCompilationAndLinkingErrors(int vertexID, int fragmentID) {
+    int success = glGetShaderi(vertexID, GL_COMPILE_STATUS);
+    if (success == GL_FALSE) {
+      int len = glGetShaderi(vertexID, GL_INFO_LOG_LENGTH);
+      throw new RuntimeException("ERROR: Failed to compile vertex shader from " + filePath + '.' + glGetShaderInfoLog(
+          vertexID,
+          len));
+    }
+
+    success = glGetShaderi(fragmentID, GL_COMPILE_STATUS);
+    if (success == GL_FALSE) {
+      int len = glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH);
+      throw new RuntimeException("ERROR: Failed to compile fragment shader from " + filePath + '.' + glGetShaderInfoLog(
+          fragmentID,
+          len));
+    }
+
     success = glGetProgrami(shaderProgramId, GL_LINK_STATUS);
     if (success == GL_FALSE) {
       int len = glGetProgrami(shaderProgramId, GL_INFO_LOG_LENGTH);
-      System.out.println("ERROR: Failed to link program from " + filePath + '.');
-      System.out.println(glGetProgramInfoLog(shaderProgramId, len));
-      assert false : "";
+      throw new RuntimeException("ERROR: Failed to link program from " + filePath + '.' + glGetProgramInfoLog(
+          shaderProgramId,
+          len));
     }
   }
 
