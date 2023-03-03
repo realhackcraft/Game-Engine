@@ -65,7 +65,7 @@ public class MouseListener {
 
     if (button > listener.mouseButtonPressed.length) return;
 
-
+    System.out.println("Button: " + button + " Action: " + action);
     if (action == GLFW_PRESS) {
       listener.mouseButtonPressed[button] = true;
     } else if (action == GLFW_RELEASE) {

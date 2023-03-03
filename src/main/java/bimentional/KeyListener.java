@@ -21,7 +21,7 @@ public class KeyListener {
   }
 
   /**
-   * This method is called by GLFW when a key is pressed or released.
+   * GLFW calls this method when a key is pressed or released.
    *
    * @param window   the Window object that received the event
    * @param key      the key that was pressed or released

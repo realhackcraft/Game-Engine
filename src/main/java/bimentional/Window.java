@@ -58,6 +58,10 @@ public class Window {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 //    Create the window
     glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
     if (glfwWindow == NULL) {
@@ -85,6 +89,7 @@ public class Window {
     float beginTime = Time.getTime();
     float endTime;
     float dt = -1f;
+    float fpsTimer = 0f;
 
     while (!glfwWindowShouldClose(glfwWindow)) {
       glfwPollEvents();
@@ -98,12 +103,15 @@ public class Window {
 
       glfwSwapBuffers(glfwWindow);
 
-      updateFPS(1f / dt);
-      System.out.println("FPS: " + 1f / dt);
+      if (fpsTimer >= 1f) {
+        updateFPS(1f / dt);
+        fpsTimer = 0f;
+      }
 
       endTime = Time.getTime();
       dt = endTime - beginTime;
       beginTime = endTime;
+      fpsTimer += dt;
     }
   }
 
@@ -111,19 +119,20 @@ public class Window {
     switch (newScene) {
       case LEVEL_EDITOR:
         currentScene = new LevelEditor();
-//        currentScene.init();
         break;
       case LEVEL:
         currentScene = new Level();
         break;
       default:
         assert false : "Invalid scene: " + newScene;
-        break;
+        return;
     }
+
+    currentScene.init();
   }
 
   private static void updateFPS(float fps) {
-    glfwSetWindowTitle(Window.get().glfwWindow, Window.get().title + " | FPS: " + fps);
+    glfwSetWindowTitle(Window.get().glfwWindow, Window.get().title + " | FPS: " + Math.round(fps));
   }
 
   public static Window get() {
