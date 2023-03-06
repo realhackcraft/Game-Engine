@@ -1,7 +1,10 @@
 package bimentional.scene;
 
 import bimentional.Camera;
+import bimentional.GameObject;
 import bimentional.Window;
+import bimentional.components.FontRenderer;
+import bimentional.components.SpriteRender;
 import bimentional.renderer.Shader;
 import bimentional.renderer.Texture;
 import org.joml.Vector2f;
@@ -40,6 +43,7 @@ public class LevelEditor extends Scene {
   private Texture texture;
   private Shader defaultShader;
   private int vaoId, vboId, eboId;
+  private GameObject gameObject;
 
   public LevelEditor() {
     Window.get().r = 1f;
@@ -80,10 +84,22 @@ public class LevelEditor extends Scene {
     glBindVertexArray(0);
 
     defaultShader.detach();
+    texture.unbind();
+
+    for (GameObject gameObject : this.gameObjects) {
+      gameObject.update(dt);
+    }
   }
 
   @Override
   public void init() {
+    this.gameObject = new GameObject("Test Object");
+
+    this.gameObject.addComponent(new SpriteRender());
+    this.gameObject.addComponent(new FontRenderer());
+
+    this.addGameObject(this.gameObject);
+
     this.camera = new Camera(new Vector2f(0, 0));
 
     defaultShader = new Shader("/shaders/default.glsl");

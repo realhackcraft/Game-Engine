@@ -43,10 +43,10 @@ public class Texture {
       } else if (channels.get(0) == 4) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
       } else {
-        throw new IOException("Error: image with " + channels.get(0) + " channels are unsupported, only 3 or 4 channels are supported.");
+        throw new IOException("Error: Image with " + channels.get(0) + " channels are unsupported, only 3 or 4 channels are supported.");
       }
     } else {
-      throw new IOException("Error: failed to load a texture file from " + filePath + "!\n Reason: " + stbi_failure_reason());
+      throw new IOException("Error: Failed to load a texture file from " + filePath + "!\n Reason: " + stbi_failure_reason());
     }
 
     stbi_image_free(image);

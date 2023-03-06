@@ -30,6 +30,35 @@ public class Window {
     this.title = "Bimentional";
   }
 
+  public static void changeScene(SceneType newScene) {
+    switch (newScene) {
+      case LEVEL_EDITOR:
+        currentScene = new LevelEditor();
+        break;
+      case LEVEL:
+        currentScene = new Level();
+        break;
+      default:
+        assert false : "Invalid scene: " + newScene;
+        return;
+    }
+
+    currentScene.init();
+    currentScene.start();
+  }
+
+  private static void updateFPS(float fps) {
+    glfwSetWindowTitle(Window.get().glfwWindow, Window.get().title + " | FPS: " + Math.round(fps));
+  }
+
+  public static Window get() {
+    if (window == null) {
+      window = new Window();
+    }
+
+    return window;
+  }
+
   public void run() {
     System.out.println("hello LWJGL " + Version.getVersion() + "!");
 
@@ -113,33 +142,5 @@ public class Window {
       beginTime = endTime;
       fpsTimer += dt;
     }
-  }
-
-  public static void changeScene(SceneType newScene) {
-    switch (newScene) {
-      case LEVEL_EDITOR:
-        currentScene = new LevelEditor();
-        break;
-      case LEVEL:
-        currentScene = new Level();
-        break;
-      default:
-        assert false : "Invalid scene: " + newScene;
-        return;
-    }
-
-    currentScene.init();
-  }
-
-  private static void updateFPS(float fps) {
-    glfwSetWindowTitle(Window.get().glfwWindow, Window.get().title + " | FPS: " + Math.round(fps));
-  }
-
-  public static Window get() {
-    if (window == null) {
-      window = new Window();
-    }
-
-    return window;
   }
 }
