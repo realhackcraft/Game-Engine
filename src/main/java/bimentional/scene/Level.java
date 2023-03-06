@@ -1,17 +1,17 @@
 package bimentional.scene;
 
 public class Level extends Scene {
-    public Level() {
-        System.out.println("Level");
-    }
+  public Level() {
+    System.out.println("Level");
+  }
 
-    @Override
-    public void update(float dt) {
+  @Override
+  public void update(float dt) {
 
-    }
+  }
 
-    @Override
-    public void init() {
+  @Override
+  public void init() {
 
-    }
+  }
 }
