@@ -17,11 +17,11 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-  private static Scene currentScene;
   private static Window window = null;
   private final String title;
   public float r, g, b, a;
   int width, height;
+  private Scene currentScene;
   private long glfwWindow;
 
   private Window() {
@@ -33,18 +33,18 @@ public class Window {
   public static void changeScene(SceneType newScene) {
     switch (newScene) {
       case LEVEL_EDITOR:
-        currentScene = new LevelEditor();
+        get().currentScene = new LevelEditor();
         break;
       case LEVEL:
-        currentScene = new Level();
+        get().currentScene = new Level();
         break;
       default:
         assert false : "Invalid scene: " + newScene;
         return;
     }
 
-    currentScene.init();
-    currentScene.start();
+    get().currentScene.init();
+    get().currentScene.start();
   }
 
   private static void updateFPS(float fps) {
@@ -57,6 +57,10 @@ public class Window {
     }
 
     return window;
+  }
+
+  public static Scene getScene() {
+    return get().currentScene;
   }
 
   public void run() {

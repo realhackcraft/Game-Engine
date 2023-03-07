@@ -2,49 +2,13 @@ package bimentional.scene;
 
 import bimentional.Camera;
 import bimentional.GameObject;
+import bimentional.Transform;
 import bimentional.Window;
-import bimentional.components.FontRenderer;
 import bimentional.components.SpriteRender;
-import bimentional.renderer.Shader;
-import bimentional.renderer.Texture;
 import org.joml.Vector2f;
-import org.lwjgl.BufferUtils;
-import util.Time;
-
-import java.io.IOException;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-import static org.lwjgl.opengl.GL30.*;
+import org.joml.Vector4f;
 
 public class LevelEditor extends Scene {
-//  cords, color, UV cords
-
-  private final float[] vertexArray = {
-      100.5f, 0.5f, 0.0f,
-      1.0f, 0.0f, 0.0f, 1.0f,
-      1, 1,                   //   Bottom right 0
-      0.5f, 100.5f, 0.0f,
-      0.0f, 1.0f, 0.0f, 1.0f,
-      0, 0,                  //   Top left     1
-      100.5f, 100.5f, 0.0f,
-      1.0f, 0.0f, 1.0f, 1.0f,
-      1, 0,                   // Top right    2
-      0.5f, 0.5f, 0.0f,
-      1.0f, 1.0f, 0.0f, 1.0f,
-      0, 1,                   //     Bottom left  3
-  };
-
-  // IMPORTANT: Must be in counter-clockwise order
-  private final int[] elementArray = {
-      2, 1, 0, // Top right triangle
-      0, 1, 3 // bottom left triangle
-  };
-  private Texture texture;
-  private Shader defaultShader;
-  private int vaoId, vboId, eboId;
-  private GameObject gameObject;
-
   public LevelEditor() {
     Window.get().r = 1f;
     Window.get().g = 1f;
@@ -54,99 +18,32 @@ public class LevelEditor extends Scene {
 
   @Override
   public void update(float dt) {
-//    camera.position.x -= dt * 50;
-//    camera.position.y -= dt * 50;
-
-    defaultShader.use();
-
-    // upload the texture
-    defaultShader.uploadTexture("uTexture", 0);
-    glActiveTexture(GL_TEXTURE0);
-    texture.bind();
-
-    defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
-    defaultShader.uploadMat4f("uView", camera.getViewMatrix());
-    defaultShader.uploadFloat("uTime", Time.getTime());
-
-    // Bind the VAO that we're using
-    glBindVertexArray(vaoId);
-
-    // Enable the vertex attribute pointers
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
-    glDrawElements(GL_TRIANGLES, elementArray.length, GL_UNSIGNED_INT, 0);
-
-    // Unbind everything
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-
-    glBindVertexArray(0);
-
-    defaultShader.detach();
-    texture.unbind();
-
     for (GameObject gameObject : this.gameObjects) {
       gameObject.update(dt);
     }
+
+    this.renderer.render();
   }
 
   @Override
   public void init() {
-    this.gameObject = new GameObject("Test Object");
+    this.camera = new Camera(new Vector2f());
+    int xOffset = 10;
+    int yOffset = 10;
 
-    this.gameObject.addComponent(new SpriteRender());
-    this.gameObject.addComponent(new FontRenderer());
+    float totalWidth = (float) (600 - xOffset * 2);
+    float totalHeight = (float) (300 - yOffset * 2);
+    float sizeX = totalWidth / 100;
+    float sizeY = totalHeight / 100;
 
-    this.addGameObject(this.gameObject);
-
-    this.camera = new Camera(new Vector2f(0, 0));
-
-    defaultShader = new Shader("/shaders/default.glsl");
-    defaultShader.compile();
-
-    try {
-      this.texture = new Texture("assets/textures/man.png");
-    } catch (IOException e) {
-      e.printStackTrace();
+    for (int x = 0; x < 100; x++) {
+      for (int y = 0; y < 100; y++) {
+        float xPos = x * sizeX + xOffset;
+        float yPos = y * sizeY + yOffset;
+        GameObject gameObject = new GameObject("Obj" + x + " " + y, new Transform(new Vector2f(xPos, yPos), new Vector2f(sizeX, sizeY)));
+        gameObject.addComponent(new SpriteRender(new Vector4f(xPos / totalWidth, yPos / totalHeight, 1, 1)));
+        this.addGameObject(gameObject);
+      }
     }
-
-    // ============================================================
-    // Generate VAO, VBO, and EBO buffer objects, and send to GPU
-    // ============================================================
-    vaoId = glGenVertexArrays();
-    glBindVertexArray(vaoId);
-
-    // Create a float buffer of vertices
-    FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertexArray.length);
-    vertexBuffer.put(vertexArray).flip();
-
-    // Create VBO upload the vertex buffer
-    vboId = glGenBuffers();
-    glBindBuffer(GL_ARRAY_BUFFER, vboId);
-    glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
-
-    // Create the indices and upload
-    IntBuffer elementBuffer = BufferUtils.createIntBuffer(elementArray.length);
-    elementBuffer.put(elementArray).flip();
-
-    eboId = glGenBuffers();
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuffer, GL_STATIC_DRAW);
-
-    // Add the vertex attribute pointers
-    int positionsSize = 3;
-    int colorSize = 4;
-    int uvSize = 2;
-    int vertexSizeBytes = (positionsSize + colorSize + uvSize) * Float.BYTES;
-
-    glVertexAttribPointer(0, positionsSize, GL_FLOAT, false, vertexSizeBytes, 0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionsSize * Float.BYTES);
-    glEnableVertexAttribArray(1);
-
-    glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionsSize + colorSize) * Float.BYTES);
-    glEnableVertexAttribArray(2);
   }
 }

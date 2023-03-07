@@ -2,6 +2,7 @@ package bimentional.scene;
 
 import bimentional.Camera;
 import bimentional.GameObject;
+import bimentional.renderer.Renderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public abstract class Scene {
   protected Camera camera;
   protected List<GameObject> gameObjects = new ArrayList<>();
+  protected Renderer renderer = new Renderer();
   private boolean isRunning = false;
 
   public Scene() {
@@ -20,6 +22,7 @@ public abstract class Scene {
     isRunning = true;
     for (GameObject gameObject : gameObjects) {
       gameObject.start();
+      this.renderer.add(gameObject);
     }
   }
 
@@ -28,8 +31,13 @@ public abstract class Scene {
     if (!isRunning) {
       isRunning = true;
       gameObject.start();
+      this.renderer.add(gameObject);
     }
   }
 
   public abstract void init();
+
+  public Camera getCamera() {
+    return camera;
+  }
 }

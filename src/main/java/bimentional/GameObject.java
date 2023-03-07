@@ -8,10 +8,18 @@ import java.util.List;
 public class GameObject {
   private final String name;
   private final List<Component> components;
+  public Transform transform = new Transform();
 
   public GameObject(String name) {
     this.name = name;
     this.components = new ArrayList<>();
+    this.transform = new Transform();
+  }
+
+  public GameObject(String name, Transform transform) {
+    this.name = name;
+    this.components = new ArrayList<>();
+    this.transform = transform;
   }
 
   public <T extends Component> void removeComponent(Class<T> componentClass) {
