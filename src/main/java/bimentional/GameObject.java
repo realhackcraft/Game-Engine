@@ -8,7 +8,7 @@ import java.util.List;
 public class GameObject {
   private final String name;
   private final List<Component> components;
-  public Transform transform = new Transform();
+  public Transform transform;
 
   public GameObject(String name) {
     this.name = name;
