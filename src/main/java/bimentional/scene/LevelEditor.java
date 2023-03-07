@@ -7,6 +7,7 @@ import bimentional.Window;
 import bimentional.components.SpriteRender;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import util.AssetPool;
 
 public class LevelEditor extends Scene {
   public LevelEditor() {
@@ -45,5 +46,11 @@ public class LevelEditor extends Scene {
         this.addGameObject(gameObject);
       }
     }
+
+    loadResources();
+  }
+
+  private void loadResources() {
+    AssetPool.getShader("/shaders/default.glsl").use();
   }
 }

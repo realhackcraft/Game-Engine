@@ -3,6 +3,7 @@ package bimentional.renderer;
 import bimentional.Window;
 import bimentional.components.SpriteRender;
 import org.joml.Vector4f;
+import util.AssetPool;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -25,8 +26,7 @@ public class RenderBatch {
   private int vaoId, vboId;
 
   public RenderBatch(int maxBatchSize) {
-    shader = new Shader("/shaders/default.glsl");
-    shader.compile();
+    shader = AssetPool.getShader("/shaders/default.glsl");
 
     this.sprites = new SpriteRender[maxBatchSize];
     this.maxBatchSize = maxBatchSize;
