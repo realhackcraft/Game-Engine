@@ -8,36 +8,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scene {
-  protected Camera camera;
-  protected List<GameObject> gameObjects = new ArrayList<>();
-  protected Renderer renderer = new Renderer();
-  private boolean isRunning = false;
+    protected Camera camera;
+    protected List<GameObject> gameObjects = new ArrayList<>();
+    protected Renderer renderer = new Renderer();
+    private boolean isRunning = false;
 
-  public Scene() {
-  }
-
-  public abstract void update(float dt);
-
-  public void start() {
-    isRunning = true;
-    for (GameObject gameObject : gameObjects) {
-      gameObject.start();
-      this.renderer.add(gameObject);
+    public Scene() {
     }
-  }
 
-  public void addGameObject(GameObject gameObject) {
-    gameObjects.add(gameObject);
-    if (!isRunning) {
-      isRunning = true;
-      gameObject.start();
-      this.renderer.add(gameObject);
+    public abstract void update(float dt);
+
+    public void start() {
+        for (GameObject gameObject : gameObjects) {
+            gameObject.start();
+        }
+        isRunning = true;
     }
-  }
 
-  public abstract void init();
+    public void addGameObject(GameObject gameObject) {
+        gameObjects.add(gameObject);
+        this.renderer.add(gameObject);
+//        this.renderer.add(gameObject);
+        if (isRunning) {
+            gameObject.start();
+        }
+    }
 
-  public Camera getCamera() {
-    return camera;
-  }
+    public abstract void init();
+
+    public Camera getCamera() {
+        return camera;
+    }
 }
