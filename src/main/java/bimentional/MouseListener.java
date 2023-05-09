@@ -153,7 +153,7 @@ public class MouseListener {
   }
 
   /**
-   * Detects whether the mouse is currently draggin or not
+   * Detects whether the mouse is currently dragging or not
    *
    * @return True, if the mouse is dragging, false otherwise
    */

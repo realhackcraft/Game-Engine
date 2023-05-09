@@ -5,43 +5,54 @@ import bimentional.GameObject;
 import bimentional.Transform;
 import bimentional.Window;
 import bimentional.components.SpriteRenderer;
+import bimentional.components.Spritesheet;
 import org.joml.Vector2f;
 import util.AssetPool;
 
+import java.util.Objects;
+
 public class LevelEditor extends Scene {
-    public LevelEditor() {
-        Window.get().r = 1f;
-        Window.get().g = 1f;
-        Window.get().b = 1f;
-        Window.get().a = 1f;
+  Window window = Window.get();
+
+  public LevelEditor() {
+    window.r = 1f;
+    window.g = 1f;
+    window.b = 1f;
+    window.a = 1f;
+  }
+
+  @Override
+  public void update(float dt) {
+    for (GameObject gameObject : this.gameObjects) {
+      gameObject.update(dt);
     }
 
-    @Override
-    public void update(float dt) {
-        for (GameObject gameObject : this.gameObjects) {
-            gameObject.update(dt);
-        }
+    this.renderer.render();
+  }
 
-        this.renderer.render();
-    }
+  @Override
+  public void init() {
+    loadResources();
 
-    @Override
-    public void init() {
-        this.camera = new Camera(new Vector2f());
+    this.camera = new Camera(new Vector2f());
 
-        GameObject obj1 = new GameObject("Object 1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
-        obj1.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/textures/testImage2.png")));
-        this.addGameObject(obj1);
+    Spritesheet sprites = AssetPool.getSpriteSheet("assets/spritesheets/spritesheet.png");
 
-        GameObject obj2 = new GameObject("Object 2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)));
-        obj2.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/textures/testImage.png")));
-        this.addGameObject(obj2);
+    GameObject obj1 = new GameObject("Object 1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
+    obj1.addComponent(new SpriteRenderer(sprites.getSprite(0)));
+    this.addGameObject(obj1);
 
-        loadResources();
-    }
+    GameObject obj2 = new GameObject("Object 2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)));
+    obj2.addComponent(new SpriteRenderer(sprites.getSprite(15)));
+    this.addGameObject(obj2);
+  }
 
 
-    private void loadResources() {
-        AssetPool.getShader("/shaders/default.glsl").use();
-    }
+  private void loadResources() {
+    AssetPool.getShader("/shaders/default.glsl").use();
+
+    AssetPool.addSpriteSheet("assets/spritesheets/spritesheet.png",
+        new Spritesheet(Objects.requireNonNull(AssetPool.getTexture("assets/spritesheets/spritesheet.png")),
+            16, 16, 26, 0));
+  }
 }

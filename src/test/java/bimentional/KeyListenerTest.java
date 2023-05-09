@@ -9,6 +9,7 @@ class KeyListenerTest {
     KeyListener.keyCallback(0, GLFW.GLFW_KEY_A, 0, GLFW.GLFW_PRESS, 0);
     assert KeyListener.isKeyPressed(GLFW.GLFW_KEY_A);
     KeyListener.keyCallback(0, GLFW.GLFW_KEY_A, 0, GLFW.GLFW_RELEASE, 0);
+    assert !KeyListener.isKeyPressed(GLFW.GLFW_KEY_A);
   }
 
   @Test

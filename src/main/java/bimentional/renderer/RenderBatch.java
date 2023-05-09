@@ -107,7 +107,7 @@ public class RenderBatch {
   }
 
   public void render() {
-    // For now, we will rebuffer all data every frame
+    // For now, we will buffer all data every frame
     glBindBuffer(GL_ARRAY_BUFFER, vboID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
 
