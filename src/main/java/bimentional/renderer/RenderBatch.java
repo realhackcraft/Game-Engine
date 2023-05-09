@@ -218,4 +218,12 @@ public class RenderBatch {
   public boolean isFull() {
     return this.isFull;
   }
+
+  public boolean isTextureFull() {
+    return this.textures.size() >= 8;
+  }
+
+  public boolean hasTexture(Texture texture) {
+    return this.textures.contains(texture);
+  }
 }
