@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.lwjgl.opengl.GL20.*;
 
+@SuppressWarnings("unused")
 public class Shader {
   private final String filePath;
   private boolean beingUsed = false;

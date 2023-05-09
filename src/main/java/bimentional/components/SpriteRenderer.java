@@ -9,6 +9,7 @@ public class SpriteRenderer extends Component {
   private final Vector4f color;
   private final Sprite sprite;
 
+  @SuppressWarnings("unused")
   public SpriteRenderer(Vector4f color) {
     this.color = color;
     this.sprite = new Sprite(null);

@@ -43,5 +43,9 @@ public class Spritesheet {
   public Sprite getSprite(int index) {
     return this.sprites.get(index);
   }
+
+  public Texture getTexture() {
+    return texture;
+  }
 }
 
