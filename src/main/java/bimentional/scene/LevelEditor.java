@@ -12,47 +12,55 @@ import util.AssetPool;
 import java.util.Objects;
 
 public class LevelEditor extends Scene {
-  Window window = Window.get();
+    Window window = Window.get();
 
-  public LevelEditor() {
-    window.r = 1f;
-    window.g = 1f;
-    window.b = 1f;
-    window.a = 1f;
-  }
+    private GameObject obj1;
+    private GameObject obj2;
 
-  @Override
-  public void update(float dt) {
-    for (GameObject gameObject : this.gameObjects) {
-      gameObject.update(dt);
+    public LevelEditor() {
+        window.r = 0f;
+        window.g = 0f;
+        window.b = 0f;
+        window.a = 1f;
     }
 
-    this.renderer.render();
-  }
+    @Override
+    public void update(float dt) {
+//        obj1.transform.position.x += 10.0f * dt;
+//        obj2.transform.position.x -= 10.0f * dt;
 
-  @Override
-  public void init() {
-    loadResources();
+        for (GameObject gameObject : this.gameObjects) {
+            gameObject.update(dt);
+        }
 
-    this.camera = new Camera(new Vector2f());
+        this.renderer.render();
+    }
 
-    Spritesheet sprites = AssetPool.getSpriteSheet("assets/spritesheets/spritesheet.png");
+    @Override
+    public void init() {
+        loadResources();
 
-    GameObject obj1 = new GameObject("Object 1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
-    obj1.addComponent(new SpriteRenderer(sprites.getSprite(6)));
-    this.addGameObject(obj1);
+        this.camera = new Camera(new Vector2f());
 
-    GameObject obj2 = new GameObject("Object 2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)));
-    obj2.addComponent(new SpriteRenderer(sprites.getSprite(25)));
-    this.addGameObject(obj2);
-  }
+        Spritesheet sprites = AssetPool.getSpriteSheet("assets/spritesheets/spritesheet.png");
+
+        obj1 = new GameObject("Object 1", new Transform(new Vector2f(100, 100), new Vector2f(256, 256)));
+        obj1.addComponent(new SpriteRenderer(sprites.getSprite(6)));
+        this.addGameObject(obj1);
+
+        obj2 = new GameObject("Object 2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)));
+        obj2.addComponent(new SpriteRenderer(sprites.getSprite(25)));
+        this.addGameObject(obj2);
+
+        this.renderer.render(true);
+    }
 
 
-  private void loadResources() {
-    AssetPool.getShader("/shaders/default.glsl").use();
+    private void loadResources() {
+        AssetPool.getShader("/shaders/default.glsl").use();
 
-    AssetPool.addSpriteSheet("assets/spritesheets/spritesheet.png",
-        new Spritesheet(Objects.requireNonNull(AssetPool.getTexture("assets/spritesheets/spritesheet.png")),
-            16, 16, 26, 0));
-  }
+        AssetPool.addSpriteSheet("assets/spritesheets/spritesheet.png",
+                new Spritesheet(Objects.requireNonNull(AssetPool.getTexture("assets/spritesheets/spritesheet.png")),
+                        16, 16, 26, 0));
+    }
 }
