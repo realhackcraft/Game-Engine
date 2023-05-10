@@ -31,15 +31,12 @@ public class Window {
 
   public static void changeScene(SceneType newScene) {
     switch (newScene) {
-      case LEVEL_EDITOR:
-        get().currentScene = new LevelEditor();
-        break;
-      case LEVEL:
-        get().currentScene = new Level();
-        break;
-      default:
+      case LEVEL_EDITOR -> get().currentScene = new LevelEditor();
+      case LEVEL -> get().currentScene = new Level();
+      default -> {
         System.err.println("Invalid scene: " + newScene);
         return;
+      }
     }
 
     get().currentScene.init();
