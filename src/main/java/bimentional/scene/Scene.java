@@ -16,7 +16,13 @@ public abstract class Scene {
     public Scene() {
     }
 
-    public abstract void update(float dt);
+    public void update(float dt) {
+        for (GameObject gameObject : this.gameObjects) {
+            gameObject.update(dt);
+        }
+
+        this.renderer.render();
+    }
 
     public void start() {
         for (GameObject gameObject : gameObjects) {

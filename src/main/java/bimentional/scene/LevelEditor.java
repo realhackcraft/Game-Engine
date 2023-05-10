@@ -1,15 +1,14 @@
 package bimentional.scene;
 
-import bimentional.Camera;
-import bimentional.GameObject;
-import bimentional.Transform;
-import bimentional.Window;
+import bimentional.*;
 import bimentional.components.SpriteRenderer;
 import bimentional.components.Spritesheet;
 import org.joml.Vector2f;
 import util.AssetPool;
 
 import java.util.Objects;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class LevelEditor extends Scene {
     Window window = Window.get();
@@ -26,14 +25,38 @@ public class LevelEditor extends Scene {
 
     @Override
     public void update(float dt) {
-//        obj1.transform.position.x += 10.0f * dt;
-//        obj2.transform.position.x -= 10.0f * dt;
+//        === Movement TEST ===
+        float speed;
 
-        for (GameObject gameObject : this.gameObjects) {
-            gameObject.update(dt);
+        if (KeyListener.isKeyPressed(GLFW_KEY_SPACE)) {
+            speed = 100f;
+        } else {
+            speed = 50f;
         }
 
-        this.renderer.render();
+        if (KeyListener.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+            if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
+                obj1.transform.position.x += speed * dt;
+            } else if (KeyListener.isKeyPressed(GLFW_KEY_A)) {
+                obj1.transform.position.x -= speed * dt;
+            } else if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
+                obj1.transform.position.y += speed * dt;
+            } else if (KeyListener.isKeyPressed(GLFW_KEY_S)) {
+                obj1.transform.position.y -= speed * dt;
+            }
+        } else {
+            if (KeyListener.isKeyPressed(GLFW_KEY_D)) {
+                obj2.transform.position.x += speed * dt;
+            } else if (KeyListener.isKeyPressed(GLFW_KEY_A)) {
+                obj2.transform.position.x -= speed * dt;
+            } else if (KeyListener.isKeyPressed(GLFW_KEY_W)) {
+                obj2.transform.position.y += speed * dt;
+            } else if (KeyListener.isKeyPressed(GLFW_KEY_S)) {
+                obj2.transform.position.y -= speed * dt;
+            }
+        }
+
+        super.update(dt);
     }
 
     @Override
